@@ -1,0 +1,181 @@
+const express= require('express');
+var router = express.Router();
+var winston = require('../config/winston');
+var graph = require('@microsoft/microsoft-graph-client');
+require('isomorphic-fetch');
+var bodyParser = require('body-parser');
+const util = require('util');
+
+var token1 = 'eyJ0eXAiOiJKV1QiLCJub25jZSI6Ilh0ZjE3NFBHd1htWVBRLVhYVEJWb200MzdFQS0zQ3U5cS1RUm9kOFVIUWsiLCJhbGciOiJSUzI1NiIsIng1dCI6ImtnMkxZczJUMENUaklmajRydDZKSXluZW4zOCIsImtpZCI6ImtnMkxZczJUMENUaklmajRydDZKSXluZW4zOCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8wMmFhOWZjMS0xOGJjLTQ3OTgtYTAyMC1lMDFjODU0ZGQ0MzQvIiwiaWF0IjoxNjA3MTc5MDY1LCJuYmYiOjE2MDcxNzkwNjUsImV4cCI6MTYwNzE4Mjk2NSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsidXJuOnVzZXI6cmVnaXN0ZXJzZWN1cml0eWluZm8iLCJ1cm46bWljcm9zb2Z0OnJlcTEiLCJ1cm46bWljcm9zb2Z0OnJlcTIiLCJ1cm46bWljcm9zb2Z0OnJlcTMiLCJjMSIsImMyIiwiYzMiLCJjNCIsImM1IiwiYzYiLCJjNyIsImM4IiwiYzkiLCJjMTAiLCJjMTEiLCJjMTIiLCJjMTMiLCJjMTQiLCJjMTUiLCJjMTYiLCJjMTciLCJjMTgiLCJjMTkiLCJjMjAiLCJjMjEiLCJjMjIiLCJjMjMiLCJjMjQiLCJjMjUiXSwiYWlvIjoiQVVRQXUvOFJBQUFBWnZudXhYcW9vNnkybzFPTFZFaXJSUURVeVBJTHdpdUZHcTg4RmtRNFdZSVNxK0pzMGhOQXY0NVB4ekFsRFVGYVExanZJN1M5OFEyTU1mUVhnYWh2QUE9PSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwX2Rpc3BsYXluYW1lIjoiR3JhcGggZXhwbG9yZXIgKG9mZmljaWFsIHNpdGUpIiwiYXBwaWQiOiJkZThiYzhiNS1kOWY5LTQ4YjEtYThhZC1iNzQ4ZGE3MjUwNjQiLCJhcHBpZGFjciI6IjAiLCJmYW1pbHlfbmFtZSI6IlZlZHVsYSIsImdpdmVuX25hbWUiOiJSYWh1bCIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjQ5LjIwNC4yMjcuODUiLCJuYW1lIjoiUmFodWwgVmVkdWxhIiwib2lkIjoiYjhjMTYyODYtZjlkNS00ODE0LTg1MjUtYTFiN2IwMzIyZDRmIiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTE0MDkwODIyMzMtMjA3NzgwNjIwOS03MjUzNDU1NDMtMTIxOTQ1IiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDAwQzRCQzEwQTUiLCJyaCI6IjAuQUFBQXdaLXFBcndZbUVlZ0lPQWNoVTNVTkxYSWk5NzUyYkZJcUsyM1NOcHlVR1FQQUVVLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkV3JpdGUgQ29udGFjdHMuUmVhZFdyaXRlIERldmljZU1hbmFnZW1lbnRBcHBzLlJlYWRXcml0ZS5BbGwgRGV2aWNlTWFuYWdlbWVudENvbmZpZ3VyYXRpb24uUmVhZC5BbGwgRGV2aWNlTWFuYWdlbWVudENvbmZpZ3VyYXRpb24uUmVhZFdyaXRlLkFsbCBEZXZpY2VNYW5hZ2VtZW50TWFuYWdlZERldmljZXMuUHJpdmlsZWdlZE9wZXJhdGlvbnMuQWxsIERldmljZU1hbmFnZW1lbnRNYW5hZ2VkRGV2aWNlcy5SZWFkLkFsbCBEZXZpY2VNYW5hZ2VtZW50TWFuYWdlZERldmljZXMuUmVhZFdyaXRlLkFsbCBEZXZpY2VNYW5hZ2VtZW50UkJBQy5SZWFkLkFsbCBEZXZpY2VNYW5hZ2VtZW50UkJBQy5SZWFkV3JpdGUuQWxsIERldmljZU1hbmFnZW1lbnRTZXJ2aWNlQ29uZmlnLlJlYWQuQWxsIERldmljZU1hbmFnZW1lbnRTZXJ2aWNlQ29uZmlnLlJlYWRXcml0ZS5BbGwgRGlyZWN0b3J5LkFjY2Vzc0FzVXNlci5BbGwgRGlyZWN0b3J5LlJlYWRXcml0ZS5BbGwgRmlsZXMuUmVhZFdyaXRlLkFsbCBHcm91cC5SZWFkV3JpdGUuQWxsIElkZW50aXR5Umlza0V2ZW50LlJlYWQuQWxsIE1haWwuUmVhZFdyaXRlIE1haWwuU2VuZCBNYWlsYm94U2V0dGluZ3MuUmVhZFdyaXRlIE5vdGVzLlJlYWRXcml0ZS5BbGwgb3BlbmlkIFBlb3BsZS5SZWFkIHByb2ZpbGUgUmVwb3J0cy5SZWFkLkFsbCBTaXRlcy5SZWFkV3JpdGUuQWxsIFRhc2tzLlJlYWRXcml0ZSBVc2VyLlJlYWQgVXNlci5SZWFkQmFzaWMuQWxsIFVzZXIuUmVhZFdyaXRlIFVzZXIuUmVhZFdyaXRlLkFsbCBlbWFpbCIsInNpZ25pbl9zdGF0ZSI6WyJrbXNpIl0sInN1YiI6IkJHZUkxdktTeWU3V3NVcW8tc2pLM09heWJFWXpRNEp3ZG1mT0RfN1dfcVEiLCJ0ZW5hbnRfcmVnaW9uX3Njb3BlIjoiQVMiLCJ0aWQiOiIwMmFhOWZjMS0xOGJjLTQ3OTgtYTAyMC1lMDFjODU0ZGQ0MzQiLCJ1bmlxdWVfbmFtZSI6IlJhaHVsLlZlZHVsYUBsbnRpbmZvdGVjaC5jb20iLCJ1cG4iOiJSYWh1bC5WZWR1bGFAbG50aW5mb3RlY2guY29tIiwidXRpIjoicTZvbUU5OXpsazJoUndjMEc1R0xBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19zdCI6eyJzdWIiOiJveGp5NjdIQXJlZ3QzenRHeTBpWXhmVzlwSzY0VnpNbmt6LWpGNEdWcWt3In0sInhtc190Y2R0IjoxNDE1NzAxNzgzfQ.fpGzwgXT4V4pTPO3HBFKbzzqZkaFQWUvqZ2NN1uY8aDQOwoocipoe8-I92zDaCxmo1kMZsUG5at1AyBzQNkf7DCBE8-jYVa0tBi2ZIGnkxjkEz0pTdewKckK32Im1TMedLltsUJ6mZFV4D45mKHeikRseB1A1jmkCjlcWPTezxTw4FR_j19Vypj1YCrlQxldpvoe26bSL6qHbyiN0yN3FefL02S0Bw9NBBkzxjhs38k38HLyWZF4ODzQ_NXGK0Quq5GlT7jHUCBkvILCa5bM9doAZ8k6OZp4-cZynkyEkhK2qfQ7Psn1P2CXfeVexQ0WMUiqg627rj32Qn9I8Gv8Cw'
+
+router.post('/onlinemeeting', function(req,res){
+  
+  console.log("Calling the API");
+    try{
+        var token=req.header('Authorization');
+        const client = graph.Client.init({
+            authProvider: (done) => {
+            done(null, token1);
+            }
+        })
+      
+        
+        // event1 = {
+        //     "subject": "Sprint Planning",
+        //     "body": {
+        //       "contentType": "HTML",
+        //       "content": "Walkthrough of requirement for upcoming sprint through user stories drafted by BA"
+        //     },
+        //     "start": {
+        //         "dateTime": "2020-11-27T11:55:10.484Z",
+        //         "timeZone": "UTC"
+        //     },
+        //     end: {
+        //         "dateTime": "2020-11-27T11:55:10.484Z",
+        //         "timeZone": "UTC"
+        //     },
+        //     "recurrence": {
+        //       "pattern": {
+        //         "type": "weekly",
+        //         "interval": 1,
+        //         "daysOfWeek": [ "Monday" ]
+        //       },
+        //       "range": {
+        //         "type": "endDate",
+        //         "startDate": "2020-11-30",
+        //         "endDate": "2020-12-30"
+        //       }
+        //     },
+        //     "location":{
+        //         "displayName":"Microsoft Teams"
+        //     },
+        //     "attendees": [
+        //       {
+        //         "emailAddress": {
+        //           "address":"Shipra.Kumari@lntinfotech.com",
+        //           "name": "Shipra Kumari"
+        //         },
+        //         "type": "required"
+        //       },
+        //       {
+        //         "emailAddress": {
+        //           "address":"Shweta.Potey@lntinfotech.com",
+        //           "name": "Shweta Potey"
+        //         },
+        //         "type": "required"
+        //       }
+        //     ],
+        //     "allowNewTimeProposals": true,
+        //     "isOnlineMeeting": true,
+        //     "onlineMeetingProvider": "teamsForBusiness"
+        //   };
+        
+        const newEvent = JSON.stringify(req.body);
+        console.log(newEvent);
+        client.api('/me/events').post(newEvent).then((result) => {
+        console.log("Sucess creating and sending meeting online", result)
+        return res.send(result)
+        }).catch((error) => {
+            console.log("Error", error);
+            return res.send(error)
+        });
+
+    }
+    catch(e){
+        winston.error(e);
+        console.log(e);
+        res.status(500).send("Error while sending mail");
+    }
+})
+
+module.exports = router;
+
+<teamgraph>
+
+var express = require('express');
+var winston = require('../config/winston');
+var http = require('http');
+var router = express.Router();
+console.log('Before router method');
+
+router.get('/listProjects', async (req,res)=>{
+    try{
+   
+    var azdev = require("azure-devops-node-api");
+    var orgUrl = "https://dev.azure.com/rahulgv89";
+    var token = "oolroldow3g37n4etr2n2pigm4qvvatup2uvnhykvje6xitbyl3q";  
+
+    var authHandler = azdev.getPersonalAccessTokenHandler(token); 
+    var connection = new azdev.WebApi(orgUrl, authHandler); 
+    var build = await connection.getBuildApi();
+  
+    const url = 'https://dev.azure.com/rahulgv89/_apis/projects/${projectId}?api-version=6.0'
+    var coreApiObject = await connection.getCoreApi();
+    var project = await coreApiObject.getProjects();
+    //console.log(project);
+    res.status(200).send(project)
+  }
+catch(e){
+  winston.error(e);
+  console.log(e);
+  res.status(500).send("Error while fetching aks cluster");    
+}
+    });
+
+    router.get('/listTeams/:projectId', async(req,res)=>{
+        try{
+       
+        var azdev = require("azure-devops-node-api");
+        var orgUrl = "https://dev.azure.com/rahulgv89";
+        var token = "oolroldow3g37n4etr2n2pigm4qvvatup2uvnhykvje6xitbyl3q"; 
+        var authHandler = azdev.getPersonalAccessTokenHandler(token); 
+        var connection = new azdev.WebApi(orgUrl, authHandler); 
+        var build = await connection.getBuildApi();
+        var projectId=req.params['projectId'];
+        console.log(projectId);
+              
+        
+        const url = 'https://dev.azure.com/rahulgv89/_apis/projects/'+projectId+'/teams?api-version=6.0'
+                      
+        var coreApiObject = await connection.getCoreApi();
+        var teams = await coreApiObject.getTeams(projectId)
+        console.log(teams);
+        res.status(200).send(teams)
+
+       }
+       catch(e){
+      winston.error(e);
+      console.log(e);
+      res.status(500).send("Error while fetching aks cluster");    
+    }
+        });
+
+        router.post('/listAttendees', async(req,res)=>{
+          try{
+          var azdev = require("azure-devops-node-api");
+          var orgUrl = "https://dev.azure.com/rahulgv89";
+          var token = "oolroldow3g37n4etr2n2pigm4qvvatup2uvnhykvje6xitbyl3q"; 
+          var authHandler = azdev.getPersonalAccessTokenHandler(token); 
+          var connection = new azdev.WebApi(orgUrl, authHandler); 
+          var build = await connection.getBuildApi();
+          let projectId=req.body.projectId;
+          let teamId=req.body.teamId;
+          console.log(projectId);
+          console.log(teamId);      
+          
+          const url = 'https://dev.azure.com/rahulgv89/_apis/projects/'+projectId+'/teams/'+teamId+'/members?api-version=6.0'
+                                 
+          var coreApiObject = await connection.getCoreApi();
+          var attendees = await coreApiObject.getTeamMembersWithExtendedProperties(projectId, teamId);
+          //console.log(attendees);
+          res.status(200).send(attendees)
+  
+         }
+         catch(e){
+        winston.error(e);
+        console.log(e);
+        res.status(500).send("Error while fetching aks cluster");    
+      }
+          });
+
+module.exports = router;
