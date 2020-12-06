@@ -1,0 +1,313 @@
+<div class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+  <div class="container">
+    <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('assets/imp.jpg');color:#06616b;font-size: xx-large;">
+      Collabrations</h2>
+  </div>
+</div>
+    <div class="container">
+      <h4>Create Scrum Meeting</h4>
+      
+      <div class="form-group">
+        <label><b>Project</b></label>
+        <select class="selectpicker" placeholder="Project" [(ngModel)]="selectedProjectId" #selectproject (change)="onprojectSelectChange(selectproject.value)">
+             <option>Select Your Project</option>
+            <option *ngFor="let projects of projectDetails" [value]="projects.id">{{projects.name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><b>Team</b></label>
+        <select class="selectpicker" placeholder="Team" [(ngModel)]="selectedTeam" #selectteam (change)="onteamSelectChange(selectproject.value, selectteam.value)"> 
+            <option>Select Team</option>
+            <option *ngFor="let team of teamDetails" [value]="team.id">{{team.name}}</option>
+        </select>
+       </div> 
+
+       <div class="form-group">
+  <label><b>Team Member</b></label>
+  <select class="selectpicker" placeholder="Attendees" [(ngModel)]="selectedAttendees" multiple > 
+      <option>Select Attendees</option>
+      <option *ngFor="let attendees of attendeesDetails" [value]="attendees.id">{{attendees.identity.displayName}}</option>
+  </select>
+</div>  
+
+<form (ngSubmit)="onSubmit()" #newEventForm="ngForm">
+  <div class="form-group">
+    <label for="subject"><b>Subject</b></label>
+    <input type="text" class="form-control" id="subject"
+           required placement="top" 
+           ngbTooltip="Backlog Refinement, Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospectives, Scrum Of Scrums "
+           [(ngModel)]="model.subject" name="subject"
+           #name="ngModel">
+   </div> 
+
+  <div class="form-group">
+    <label for="attendees"><b>Attendees</b></label>
+    <input type="text" class="form-control" id="attendees"
+           placeholder="Enter one or more email addresses (separated with a ;) to add attendees"
+           [(ngModel)]="model.attendees" name="attendees"
+           #name="ngModel">
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <div class="form-group">
+        <label for="start"><b>Start</b></label>
+        <input type="datetime-local" class="form-control" id="start"
+              required
+              [(ngModel)]="model.start" name="start"
+              #name="ngModel">
+        </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <label for="end"><b>End</b></label>
+        <input type="datetime-local" class="form-control" id="end"
+              required
+              [(ngModel)]="model.end" name="end"
+              #name="ngModel">
+        </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+  <label class="btn btn-primary" ngbButtonLabel>
+    <input type="checkbox" formControlName="0" ngbButton> Mon 
+  </label> &nbsp;
+  <label class="btn btn-success" ngbButtonLabel>
+    <input type="checkbox" formControlName="1" ngbButton> Tue
+  </label> &nbsp;
+  <label class="btn btn-primary" ngbButtonLabel>
+    <input type="checkbox" formControlName="2" ngbButton> Wed
+  </label> &nbsp;
+  <label class="btn btn-success" ngbButtonLabel>
+    <input type="checkbox" formControlName="3" ngbButton> Thu
+  </label> &nbsp;
+  <label class="btn btn-primary" ngbButtonLabel>
+    <input type="checkbox" formControlName="4" ngbButton> Fri
+  </label> &nbsp;
+  <label class="btn btn-danger" ngbButtonLabel>
+    <input type="checkbox" formControlName="5" ngbButton> Sat
+  </label> &nbsp;
+  <label class="btn btn-danger" ngbButtonLabel>
+    <input type="checkbox" formControlName="6" ngbButton> Sun
+  </label>
+  </div>
+
+  <div class="form-group">
+    <label for="body"><b>Body</b></label>
+    <textarea class="form-control" id="body" rows="4"
+              [(ngModel)]="model.body" name="body"
+              #name="ngModel"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary mr-2"
+          [disabled]="!newEventForm.form.valid">Create</button>
+  <a class="btn btn-secondary">Cancel</a>
+</form>
+        </div>     
+ 
+<css>
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    margin-top: 16px;
+    position: relative;
+    left: 10px;
+    width: 750px;
+  }
+  
+  .selectpicker{
+    color: black;
+    padding: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    position: absolute;
+    left: 300px;
+    width: 300px;
+  }
+  
+  import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ServicesService } from '../../services/services.service'
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder } from '@angular/forms';
+import { stringify } from '@angular/compiler/src/util';
+import { NewEvent } from './new-event';
+
+
+@Component({
+  selector: 'app-create-meeting',
+  templateUrl: './create-meeting.component.html',
+  styleUrls: ['./create-meeting.component.css']
+  })
+
+export class CreateMeetingComponent implements OnInit {
+
+  constructor(private services:ServicesService, 
+    private toaster:ToastrService,
+    private fb: FormBuilder){}
+   
+    ngOnInit(): void {
+      this.GetProjectDetails();
+        }
+      
+  
+  title = 'calender';
+  projectDetails:any;
+  teamDetails: any;
+  attendeesDetails:any;
+  model = new NewEvent();
+
+
+  selectedProjectId: String = "Select Your Project";
+  selectedTeam: String = "Select Team";
+  selectedAttendees: String = "Select Attendees"
+  selectedDate: any;
+
+
+   GetProjectDetails(){
+      this.services.getProjectDetails().subscribe(data=>{  
+      this.projectDetails=data;
+  })
+  }
+
+  onprojectSelectChange(projectId){
+      //console.log(projectId)
+      this.services.getTeamsDetails(projectId).subscribe(data=>{
+      this.teamDetails=data;
+    })
+   }
+  
+   onteamSelectChange(projectId, id){
+      //console.log(projectId, id)
+      this.services.getattendeesDetails(projectId, id).subscribe(data=>{
+      this.attendeesDetails=data;
+    })
+   }
+  
+  
+      onSubmit(): void {
+        debugger;
+        const newEvent = JSON.stringify(this.model.getGraphEvent());
+        console.log(newEvent);
+        this.services.addEventToCalendar(newEvent).subscribe((result)=>
+        {
+       console.log(result)
+      });  
+      }
+           
+ 
+
+    }
+<microsoft graph>
+import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
+
+// Model for the new event form
+export class NewEvent {
+    subject?: string;
+    attendees?: string;
+    start?: string;
+    end?: string;
+    body?: string;
+    weekday?: string;
+  
+    // Generate a MicrosoftGraph.Event from the model
+    getGraphEvent(): MicrosoftGraph.Event {
+      const graphEvent: MicrosoftGraph.Event = {
+        subject: this.subject,
+        start: {
+          dateTime: this.start,
+          timeZone: "UTC"
+        },
+        end: {
+          dateTime: this.end,
+          timeZone: "UTC"
+        },
+      //   recurrence: {
+      //      pattern: {
+      //      type: "weekly",
+      //      interval: 1,
+           
+      //  },
+      //     range: {
+      //     type: "endDate",
+      //     startDate: "2020-11-30",
+      //     endDate: "2020-12-30"
+      //    },
+      //  }
+    };
+  
+      // If there are attendees, convert to array
+      // and add them
+      if (this.attendees && this.attendees.length > 0) {
+        graphEvent.attendees = [];
+  
+        const emails = this.attendees.split(';');
+        emails.forEach(email => {
+          graphEvent.attendees.push({
+            type: "required",
+            emailAddress: {
+              address: email
+            }
+          });
+        });
+      }
+  
+      // If there is a body, add it as plain text
+      if (this.body && this.body.length > 0) {
+        graphEvent.body = {
+          contentType: "text",
+          content: this.body
+        };
+      };
+  
+      return graphEvent;
+    }
+  }
+  
+  <service>
+     getProjectDetails(){
+      return this.http.get(this.url+'/listProjects', {headers:this.headers});
+   }
+   
+   getTeamsDetails( projectId) {
+      return this.http.get(this.url+'/listTeams/'+projectId,{headers:this.headers});
+     }
+     
+   getattendeesDetails( projectId, teamId) {
+    try
+    {
+    let bodyData={
+      "projectId":projectId,
+      "teamId":teamId
+    };
+        return this.http.post(this.url+'/listAttendees' ,bodyData,{headers:this.headers});
+    }
+    catch(e){
+    return e;
+    }
+     }
+     addEventToCalendar(newEvent) {
+  //console.log(newEvent);
+  
+    return this.http.post(this.url+'/onlinemeeting', newEvent, {headers:this.headers});
+
+}
+ 
+   
+  
+  
+ 
+ 
+ 
+ 
+   
+   
+  
+  
+  
+  
+  
+  
