@@ -57,7 +57,7 @@ margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
                  <input type="checkbox" #baCheckBox value="BA" (click)="GenerateChannelsName($event)"/> BA
                  <input type="checkbox" #pmoCheckBox  value="PMO" (click)="GenerateChannelsName($event)"/> PMO 
                  <input type="checkbox" #testingCheckBox value="Testing" (click)="GenerateChannelsName($event)"/> Testing
-                 <di #dynamicChannelsDiv ></di>
+                 
                 </div>
              <!-- CheckBoxes   Div End here-->
   
@@ -85,7 +85,7 @@ margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
            <button   style="width:170px;" class="button" type="button" (click)="CreateChannels(
             devCheckBox.checked,baCheckBox.checked, pmoCheckBox.checked, testingCheckBox.checked,
             jiraCheckBox.checked,confluenceCheckBox.checked ,bitbucketCheckBox.checked,azuredeveopsCheckBox.checked,
-            cicdCheckBox.checked,releaseCheckBox.checked,builtCheckBox.checked)" >Create Channels</button>
+            releaseCheckBox.checked,builtCheckBox.checked)" >Create Channels</button>
         </div>
           
 
@@ -120,7 +120,7 @@ margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
 
            <!-- Right Side Div-->
 
-     <div #rightSideDiv  id="rightSideDiv" style="float:right;width: 60%;visibility: hidden;">
+     <div  id="rightSideDiv" style="float:right;width: 60%;">
      <strong>Employee Name & Mail ID</strong>
       <!-- Teams Members Name And Email ID -->
       <table class="table table-striped">

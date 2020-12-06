@@ -153,7 +153,7 @@ ngAfterViewInit(){
     confluenceCheckBox ,
     bitbucketCheckBox,
     azuredeveopsCheckBox,
-    cicdCheckBox,
+   
     releaseCheckBox,
     builtCheckBox)
     {
@@ -193,9 +193,7 @@ ngAfterViewInit(){
 
    //List of Process
    //let listofProcessComponent= new Array();
-   if(cicdCheckBox==true){
-    possibleChannelsListofComponent.push('Notification-CICD');
-   }
+  
    if(releaseCheckBox==true){
     possibleChannelsListofComponent.push('Notification-Release');
    }
