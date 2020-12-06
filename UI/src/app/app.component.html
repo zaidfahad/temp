@@ -1,0 +1,35 @@
+
+<nav>
+  <a routerLink="/azuredevop" class="clickme info">Virtual Environment & Workspace </a>
+  <a routerLink="/sprints" class="clickme info">Sprint Metrics</a>
+  <a routerLink="/azurewordcount" class="clickme info">Trending Topics</a>
+  <a routerLink="/miro" class="clickme info">Miro </a>
+  <a routerLink="/kahoot" class="clickme info">Kahoot! </a>
+  <a routerLink="/adminmschannels" class="clickme info">Admin Team &  Channels</a>
+</nav>
+<router-outlet></router-outlet>
+
+
+<style>
+  .clickme {
+    background-color: #06616B;
+    padding: 8px 20px;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:5px;
+    cursor:pointer;
+    margin: 20px;
+}
+
+
+.info {
+    background-color:rgb(8, 159, 179);
+    color: #fff;
+}
+
+.info:hover {
+    background-color:rgb(34, 200, 230);;
+    color: #FFFFFF;
+}
+
+</style>

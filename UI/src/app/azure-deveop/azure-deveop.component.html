@@ -1,0 +1,84 @@
+<div class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+    <div class="container">
+      <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('assets/imp.jpg');color:#06616b;font-size: xx-large;">
+        Onboarding Sprint Zero Activities</h2>
+    </div>
+  </div>
+    <div class="container">
+    <div>
+        <h3></h3>
+    <div>
+     <strong>Azure Urls :</strong> <select style="width: 400px;" name="AzureUrls" id="AzureUrls" class="form-control" #selectparent (change)="onParentSelectChange(selectparent.value)">
+        <option   value="Select"  >
+            Select Urls </option>
+            <option *ngFor="let parentObj of azureprojectDetails"  [value]="parentObj.name"  >
+                {{parentObj.name}}</option>
+        </select>
+        
+        <strong>Organizations:</strong>
+        <select name="Organizations" style="width: 400px;" id="Organizations" class="form-control"  #Organizations (change)="onOrganizationSelectChange(Organizations.value)">
+            <option   value="select"  >
+                Select Organizations </option>
+                <option  [value]="objOrg" *ngFor="let objOrg of  organizationsDetails"  >
+                    {{objOrg}}</option>
+            </select>
+        
+
+            <strong>Project Details:</strong>
+            <select name="ProjectDetails" style="width: 400px;" id="ProjectDetails" class="form-control" 
+            #ProjectDetails (change)="onProjectDetailsSelectChange(ProjectDetails.value)">
+                <option   value="select"  >
+                    Select Projects </option>
+                    <option  *ngFor="let proObj of projectsDetails"  [value]="proObj"  >
+                        {{proObj}}</option>
+                </select>
+    </div>
+
+        <table class="table table-striped">
+           <thead>
+              <tr>
+                <th><input type="checkbox" #MaincheckBox  id="mainCheckBox"   (change)="onMainCheckBoxChanged(MaincheckBox.checked)"   /></th>
+                 <th>S.No</th>
+                 <th>Epic</th>
+                 <th>Features</th>
+                 <th>User Story</th>
+                 <th>Description</th>
+                
+              </tr>
+           </thead>
+           <tbody id="tbody">
+              <tr *ngFor="let item of azureDeveopDataPaging">
+                <th><input type="checkbox" #childcheckBox  id="{{item._id}}"   (change)="childcheckBoxChangeEvent(childcheckBox.id,childcheckBox.checked)" 
+                     /></th>
+                 <th  [(ngModel)]="item.sNo">{{ item.sNo }}</th>
+                 <td [(ngModel)]="item.epic">{{ item.epic }}</td>
+                 <td  [(ngModel)]="item.feature">{{ item.feature }}</td>
+                 <td  [(ngModel)]="item.userStory">{{item.userStory}}</td>
+                 <td  [(ngModel)]="item.description">{{ item.description}}</td>
+              </tr>
+           </tbody>
+        </table>
+        <span style="float: left;margin: 20px;padding: 10x;">
+        <button   (click)="UploadData()" value="Upload"  class="button" style="float: left;margin: 20px;" >Upload </button> 
+        <button   (click)="PreviousPage()" value="Previous"  class="back" style="float: left;margin: 20px;padding-left: 30px" >Previous</button> 
+        <button   (click)="NextPage()" value="Next"  class="button" style="float: left;margin: 20px" >Next</button> 
+        </span>
+
+     </div>
+    
+  
+
+
+
+
+    
+    
+   
+   
+  
+  
+  
+  
+  
+  

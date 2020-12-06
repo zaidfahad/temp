@@ -1,0 +1,110 @@
+<!-- Loader -->
+<div class="lntloader" style="position: absolute;
+z-index: 15;
+top: -8%;
+left: 50%;
+margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__ball"></div>
+</div>
+<!-- Loader -->.
+
+<div class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+<div class="container">
+  <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('assets/imp.jpg');color:#06616b;font-size: xx-large;">
+    Kahoot Learn While Playing</h2>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+ <!--  Forms-->
+
+ <div class="registration-form" style="float: inherit;margin: 20px;">
+    <div class="form-group">
+
+    <strong>Teams :</strong> 
+    <select style="width: 400px;" name="Questions" id="Teams" 
+    class="form-control" #Questions (change)="OnQuestionsTypeSelectionChange(Questions.value)">
+      <option   value="Select"   >
+          Select Questions Type </option>
+          <option value="multichoice">Multi Choice </option>
+          <option value="singlechoice">Single Choice </option>
+          <option value="truefalse">True & False </option>
+      </select>
+       
+
+      <!-- Ques Answers Html start here-->
+  
+      <div style="margin: 20px;"  >
+        <strong>Question </strong>    <input type="text" placeholder="Type your question for quiz game here !      Type your question for quiz game here ! Type your question for quiz game here !      Type your question for quiz game here ! "  #questions class="form-control" />
+        
+      </div>
+
+      <div id="allradioandcheckBox" #allAnswerData>
+
+      <div style="margin: 20px;" >
+      <strong>A </strong> <input [type]="checkboxorradio" style="margin: 20px;"  #answerchoicecheckbox1 /><input type="text"  style="margin: 20px;width: 50%;height: calc(1.5em + .75rem + 2px);
+      padding: .375rem .75rem;font-size: 1rem;font-weight: 400; line-height: 1.5; color: #495057;
+      background-color: #fff;    background-clip: padding-box;     border: 1px solid rgb(171,214,220);
+      border-radius: .25rem;transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;"  #answerchoicetextbox1   placeholder="Answer No A type here "/>
+      </div>
+
+      <div style="margin: 20px;">
+        <strong>B </strong> <input [type]="checkboxorradio" style="margin: 20px;"  #answerchoicecheckbox2 placeholder="Answer No B type here " /><input type="text" placeholder="Answer No B type here " style="margin: 20px;width: 50%;height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;font-size: 1rem;font-weight: 400; line-height: 1.5; color: #495057;
+        background-color: #fff;    background-clip: padding-box;     border: 1px solid rgb(171,214,220);
+        border-radius: .25rem;transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;"  #answerchoicetextbox2 />
+        </div>
+   
+              
+          <!-- ifQuestionTypeTruefalse div start here-->
+         <div  id="ifQuestionTypeTruefalse" [ngStyle]="{'visibility':ifQuestionTypeTruefalse}">
+        <div style="margin: 20px;">
+            <strong>C </strong> <input [type]="checkboxorradio" style="margin: 20px;"  #answerchoicecheckbox3 /><input type="text"  style="margin: 20px;width: 50%;height: calc(1.5em + .75rem + 2px);
+            padding: .375rem .75rem;font-size: 1rem;font-weight: 400; line-height: 1.5; color: #495057;
+            background-color: #fff;    background-clip: padding-box;     border: 1px solid rgb(171,214,220);
+            border-radius: .25rem;transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;" #answerchoicetextbox3 placeholder="Answer No C type here " />
+            </div>
+
+            <div style="margin: 20px;" >
+                <strong>D </strong> <input [type]="checkboxorradio" style="margin: 20px;"  #answerchoicecheckbox4 /><input type="text" name="answerchoicetextbox4" style="margin: 20px;width: 50%;height: calc(1.5em + .75rem + 2px);
+                padding: .375rem .75rem;font-size: 1rem;font-weight: 400; line-height: 1.5; color: #495057;
+                background-color: #fff;    background-clip: padding-box;     border: 1px solid rgb(171,214,220);border-radius: .25rem;transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;"  #answerchoicetextbox4  placeholder="Answer No D type here "/>
+                </div>
+
+             </div>
+               <!-- ifQuestionTypeTruefalse end here -->
+
+    </div>
+  
+
+    <!-- Question Answer end here div (click)="GetChannelMessages(selectChannels.value,selectteams.value)"-->
+      <div id="btn-groups">
+        <button  class="button" style="float: left;padding: 5px;width: 140px;" (click)="AddQuestions(questions.value,answerchoicetextbox1.value,answerchoicecheckbox1.checked,answerchoicetextbox2.value,answerchoicecheckbox2.checked,answerchoicetextbox3.value,answerchoicecheckbox3.checked,answerchoicetextbox4.value,answerchoicecheckbox4.checked)" >Add Questions</button><button  class="button" style="float: left;margin-left: 20px;">Reset </button>
+
+      </div>
+      <div id="btn-groups" style="margin-left: 303px;">
+        <button  class="button" style="float: left;padding: 5px;width: 180px;" (click)="PublishGame();"  >Create Game Board</button>
+
+      </div>
+    </div> 
+
+   
+    </div>
+
+ <!-- Forms Endf ehre-->
+    
+
+     

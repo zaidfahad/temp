@@ -1,0 +1,99 @@
+<!-- Loader -->
+<div class="lntloader" style="position: absolute;
+z-index: 15;
+top: -8%;
+left: 50%;
+margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__ball"></div>
+</div>
+<!-- Loader -->
+<div  class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+    <div class="container">
+      <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('/assets/imp.jpg');color:#06616b;font-size: xx-large;">
+        Sprint Metrics</h2>
+    </div>
+  </div>
+    <div class="container site"  [ngStyle]="{'pointer-events':formEnabledOrDisabled}" >
+    <div>
+   
+        <!-- <div class="registration-form" style="float: inherit;" >
+                <div class="form-group"><b>Sprint Velocity</b>
+                    <input type="text"  class="form-control item" id="sprintVilocityTxt"  placeholder="Sprint Vilocity" #sprintVilocityTxt  style="width: 400px;"/>
+                </div>
+                <div class="form-group"><strong>Lead Time</strong>
+                    <input type="text" class="form-control item" id="leadTime" #leadTime placeholder="Lead Time" style="width: 400px;">
+                </div>
+                <div class="form-group"><strong>Cycle Time</strong>
+                    <input type="text" class="form-control item" id="cycleTime" #cycleTime placeholder="Cycle Time" style="width: 400px;">
+                </div>
+                <div class="">
+                    <button  class="button" style="float: left;" (click)="CalculateActualVilocity(sprintVilocityTxt.value,leadTime.value,cycleTime.value)" >Submit</button><button  class="button" style="float: left;margin-left: 20px;">Cancel </button>
+                </div>
+        </div> -->
+        <table class="table">
+          <tr>
+            <td> <input type="text"  class="form-control item" id="velocity"  placeholder="Sprint Velocity" #velocity  style="width: 400px;"/></td>
+            <td> <input type="text" class="form-control item" id="throughPut"  placeholder="ThroughPut" #throughPut style="width: 400px;"></td>
+          </tr>
+          <tr>
+            <td> <input type="text" class="form-control item" id="leadTime"  placeholder="Lead Time" #leadTime style="width: 400px;"></td>
+            <td><input type="text" class="form-control item" id="blockingTime"  placeholder="Blocking Time" #blockingTime style="width: 400px;"></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="form-control item" id="cycleTime"  placeholder="Cycle Time" #cycleTime style="width: 400px;"></td>
+            <td><input type="text" class="form-control item" id="workItemAge"  placeholder="WorkItem Age" #workItemAge style="width: 400px;"></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="form-control item" id="flowEfficiency"  placeholder="Flow Efficiency" #flowEfficiency style="width: 400px;"></td>
+            <td><input type="text" class="form-control item" id="backlogReadiness"  placeholder="Backlog Readiness" #backlogReadiness style="width: 400px;"></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="form-control item" id="percentComplete"  placeholder="Percent Complete" #percentComplete style="width: 400px;"></td>
+            <td></td>
+          </tr>
+          <tr Align="center">
+            <td><button (click)="CalculateActualVelocity(velocity.value,leadTime.value,cycleTime.value,throughPut.value,blockingTime.value,workItemAge.value,flowEfficiency.value,backlogReadiness.value,percentComplete.value)"  class="button" style="float: left;margin-left: 20px;" value="Submit">Submit </button><button (click)="handleClear()" class="button" style="float: left;margin-left: 20px;">Cancel </button></td>
+            <td></td>
+          </tr>
+        </table>
+
+
+        <table class="table table-striped">
+           <thead>
+              <tr>
+                <th><input type="checkbox" #MaincheckBox  id="mainCheckBox"  style="visibility: hidden;"  /></th>
+                 <th>Metric</th>
+                 <th>Expected</th>
+                 <th>Actual</th>
+                 <th>---</th>
+              </tr>
+           </thead>
+           <tbody>
+              <tr *ngFor="let item of sprintsDetailsData">
+                <th><input type="checkbox" #childcheckBox  id="{{item._id}}"  style="visibility: hidden;"    /></th>
+                 <th >{{ item.MetricName }}</th>
+                 <td>{{ item.Expected }}</td>
+                 <td>{{ item.Actual }}</td>
+                 <td ><img height="20px" width="20px" 
+                  src="https://localhost/assets/{{item.Color}}.jpg"  /></td>
+                   <!-- src="/assets/{{item.Color}}.jpg"  -->
+              </tr>
+           </tbody>
+        </table>
+        
+        <span style="float: left;margin: 20px;padding: 10x;">
+          <button   (click)= "RefreshData()" value="Upload"  class="button" style="float: left;margin: 20px;" >Refresh</button> 
+            <button   value="Previous"  class="back" style="float: left;margin: 20px;padding-left: 30px" >Previous</button> 
+            <button   value="Next"  class="button" style="float: left;margin: 20px" >Next</button> 
+            </span>
+            
+     </div>
+     
+    
+  

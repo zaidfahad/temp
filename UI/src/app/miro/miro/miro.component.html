@@ -1,0 +1,140 @@
+<!-- Loader -->
+<div class="lntloader" style="position: absolute;
+z-index: 15;
+top: -8%;
+left: 50%;
+margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':localSetting.loaderVisibleHide}" >
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__ball"></div>
+</div>
+<!-- Loader -->
+
+<div class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+    <div class="container">
+      <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('assets/imp.jpg');color:#06616b;font-size: xx-large;">
+        Miro Creating Boards & Fetching Informations</h2>
+    </div>
+  </div>
+    <div class="container" [ngStyle]="{'pointer-events':localSetting.formEnabledOrDisabled}">
+    <div>
+        <h3></h3>
+    <div>
+
+      <!--  Getting Team  -->
+
+    
+        <div class="form-group">
+          
+
+         
+     <strong>Board Name :</strong> <input type="text" style="width: 400px;" name="boardname" id="boardname" class="form-control" #boardname placeholder="Enter Board Name"  />
+      
+     <strong>Descriptions  :</strong> <input type="text" style="width: 400px;" name="descriptions" id="descriptions" class="form-control" #boardname placeholder="Enter Descriptions"  #descriptions/>
+
+        <strong>Sharing Access Policy:</strong>
+        <select name="sharingpolicyaccess" style="width: 400px;" id="sharingpolicyaccess" class="form-control"  #sharingpolicyaccess >
+            <option value="none">Select Sharing Access Policy </option>
+            <option value="private">Private  </option>
+            <option value="view">View </option>
+            <option value="comment">Comment </option>
+            </select>
+        
+
+            <strong>Sharing Access Team Policy :</strong>
+            <select name="teampolicy" style="width: 400px;" id="teampolicy"  #teampolicy
+            class="form-control" (change)="CheckIfAllFieldsFilled(boardname.value,descriptions.value,sharingpolicyaccess.value,teampolicy.value)" >
+            <option value="none">Select Sharing Access Team Policy </option>
+            <option value="private">Private  </option>
+            <option value="view">View </option>
+            <option value="comment">Comment </option>
+            <option value="edit">edit </option>
+                </select>
+
+       <!-- Team & Channel selection Block -->
+      <strong>Teams :</strong> 
+      <select style="width: 400px;" name="Teams" id="Teams" 
+      class="form-control" #selectteams  (change)="OnteamSelectChange(selectteams.value)" [disabled]="localSetting.teamListdisabled">
+        <option   value="Select"    >
+            Select Teams </option>
+            <option *ngFor="let teamObj of teamsDetails"  [value]="teamObj.id"  >
+                {{teamObj.displayName}}</option>
+        </select>  <br/>
+        <strong>Channels :</strong> 
+        <select style="width: 400px;" name="Channels" id="Channels" 
+        class="form-control" #selectChannels (change)="OnchannelselectChange(selectChannels.value)">
+          <option   value="Select"  >
+              Select Channels </option>
+              <option *ngFor="let channelsObj of channelsDetails"  [value]="channelsObj.id"  >
+                  {{channelsObj.displayName}}</option>
+          </select>
+
+        <!-- Team and Channel Select Block-->
+
+            <div [ngStyle]="{'visibility':localSetting.isNewCreatedBoardNameDivVisible}" style="margin: 30px;float: left;padding-left: 30px;">
+            <strong>Created Board Name  : </strong>  {{localSetting.newCreatedBoardName}}
+            </div>
+           </div>
+
+         <!-- Teams Members Name And Email ID -->
+         <table class="table table-striped">
+          <thead>
+             <tr>
+               <th><input type="checkbox" #MaincheckBox  id="mainCheckBox" [checked]="localSetting.isSelected"  (change)="onMainCheckBoxChanged(MaincheckBox.checked)"   /></th>
+                <th>Name</th>
+                <th>Email ID</th>
+             </tr>
+          </thead>
+          <tbody id="tbody">
+             <tr *ngFor="let item of allemployeesdetailsPage">
+               <td><input type="checkbox" #childcheckBox  id="{{item.mail}}"  [checked]="item.isSelected"  (change)="childcheckBoxChangeEvent(childcheckBox.id,childcheckBox.checked)"   /></td>
+                <td  [(ngModel)]="item.displayName">{{ item.displayName }}</td>
+                <td [(ngModel)]="item.mail">{{ item.mail }}</td>
+             </tr>
+          </tbody>
+       </table>
+       <span style="float: left;margin: 20px;padding: 10x;">
+        <button   value="createboard" [disabled]="localSetting.iscreateButtonDisabled"  [className]="localSetting.isdisabledCreateBoardbuttonClass" style="float: left;margin: 20px;" (click)="CreateBoard(boardname.value,descriptions.value,sharingpolicyaccess.value,teampolicy.value)" >Create Board </button> 
+
+        <!-- Install App Button -->
+
+        <button   value="installAppButton" [disabled]="localSetting.isinstallAppButtonDisabled"  [className]="localSetting.isdisabledinstallAppButtonClass" style="float: left;margin: 20px;" (click)="InstallAppToMsTeam(selectteams.value)" >Install App </button> 
+
+        <button   value="addAppButton" [disabled]="localSetting.isaddAppButtonDisabled"  [className]="localSetting.isdisabledaddAppButtonClass" style="float: left;margin: 20px;width: 150px;" (click)="AddAppIntoTabInMSTeamsChannel(selectteams.value,selectChannels.value)" >Add App In Tab </button> 
+
+
+        <button   value="shareboard" disabled  [className]="localSetting.isdisabledsharedbuttonClass" style="float: left;margin: 20px;width: 150px;" [disabled]="localSetting.isshareboardButtonDisabled"  (click)="SharedBoardWithTeamMates()" >Share Board</button> 
+        <button  value="Previous"  class="back" style="float: left;margin: 20px;padding-left: 30px;"
+         [className]="localSetting.isdisabledPreviousbuttonClass" [disabled]="localSetting.ispreviousButtonDisabled" (click)="PreviousPage()" >Previous</button> 
+        <button   value="Next"  class="button" style="float: left;margin: 20px"
+        [disabled]="localSetting.isnextButtonDisabled"  [className]="localSetting.isdisabledNextbuttonClass" (click)="NextPage()" >Next</button> 
+       
+        </span>
+      </div>
+    <!-- Team & Channels Block Here -->
+
+
+
+       
+        
+     </div>
+    
+     
+
+
+
+
+    
+    
+   
+   
+  
+  
+  
+  
+  
+  

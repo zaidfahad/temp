@@ -1,0 +1,39 @@
+{
+  "name": "teamcompanion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js Test",
+    "start": "nodemon server.js ",
+    "dev": "nodemon server.js Dev",
+    "prod": "nodemon server.js Prod",
+    "localhost": "nodemon server.js Localhost"
+  },
+  "author": "shweta potey",
+  "license": "ISC",
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^2.1.1",
+    "app-root-path": "^3.0.0",
+    "azure-devops-node-api": "^10.1.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "count-words-array": "^1.0.13",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "isomorphic-fetch": "^3.0.0",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.11",
+    "natural": "^2.1.5",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "stopword": "^1.0.3",
+    "timespan": "^2.3.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

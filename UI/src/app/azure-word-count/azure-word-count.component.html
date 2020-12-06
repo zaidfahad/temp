@@ -1,0 +1,85 @@
+<!-- Loader -->
+<div class="lntloader" style="position: absolute;
+z-index: 15;
+top: -8%;
+left: 50%;
+margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__ball"></div>
+</div>
+<!-- Loader -->
+<div class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+<div class="container">
+  <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('assets/imp.jpg');color:#06616b;font-size: xx-large;">
+    Trending Topics Word Cloud</h2>
+</div>
+</div>
+    <div class="container site">
+    <div>
+ 
+        
+        <div class="registration-form" style="float: inherit;">
+          <div class="form-group">
+          <strong>Teams :</strong> 
+          <select style="width: 400px;" name="Teams" id="Teams" 
+          class="form-control" #selectteams (change)="onteamSelectChange(selectteams.value)">
+            <option   value="Select"  >
+                Select Teams </option>
+                <option *ngFor="let teamObj of teamsDetails"  [value]="teamObj.id"  >
+                    {{teamObj.displayName}}</option>
+            </select></div>
+            <div class="form-group"><strong>Channels :</strong> 
+              <select style="width: 400px;" name="Channels" id="Channels" 
+              class="form-control" #selectChannels (change)="onchannelselectChange(selectChannels.value)">
+                <option   value="Select"  >
+                    Select Channels </option>
+                    <option *ngFor="let channelsObj of channelsDetails"  [value]="channelsObj.id"  >
+                        {{channelsObj.displayName}}</option>
+                </select>
+            </div>
+            <div>
+              <label for="wordFrequency"><strong>Word Frequency:&nbsp;&nbsp;</strong></label>
+              <input type="number" min="1" max="999"  id="wordFrequency" #wordFrequency  style="width: 50px;"/>
+            </div>
+           <div class="form-group"><strong>Time Duration :</strong> 
+      
+                 <select style="width: 400px;" id="LastModifiedDate" #LastModifiedDate placeholder="LastModifiedDate">
+                  <option value="Month6"> Last 6 Month</option>
+                  <option value="Month3"> Last 3 Month</option>
+                  <option value="Month1">Last 1 Month</option>
+                  <option value="Today">Today</option>
+                </select> 
+            </div>
+
+
+            </div>
+
+            
+           
+            <div class="">
+                <button  class="button" style="float: left;padding: 5px;width: 190px;" (click)="GetChannelDurationMessages(selectChannels.value,selectteams.value,LastModifiedDate.value,wordFrequency.value)">Generate Word Cloud</button><button  class="button" style="float: left;margin-left: 20px;">Cancel </button>
+            </div>
+    </div>
+
+
+       <!--  Word Div-->
+
+       <div>
+        <angular-tag-cloud
+          [data]="wordCountdata"
+          [width]="options.width"
+          [height]="options.height"
+          [overflow]="options.overflow">
+        </angular-tag-cloud>
+      </div>
+
+       <!--  Word Count-->
+     </div>
+    
+
+     

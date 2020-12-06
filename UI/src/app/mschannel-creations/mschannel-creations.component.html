@@ -1,0 +1,166 @@
+<!-- Loader -->
+<div class="lntloader" style="position: absolute;
+z-index: 15;
+top: -8%;
+left: 50%;
+margin: 50% 50% 0 -150px" [ngStyle]="{'visibility':loaderVisibleHide}" >
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__bar"></div>
+  <div class="lntloader__ball"></div>
+</div>
+<!-- Loader -->
+<div class="jumbotron jumbotron-fluid site" style="background-image: url('assets/imp.jpg');">
+  
+<div class="container">
+  <h2 class="back display-4 site" style="font-weight: 1000 ;background-image: url('assets/imp.jpg');color:#06616b;font-size: xx-large;">
+    Trending Topics Word Cloud</h2>
+</div>
+</div>
+    <div class="container site">
+    <div>
+ 
+        
+        <div class="registration-form" style="float: inherit;">
+          <div class="form-group">
+          <strong>Teams :</strong> 
+          <select style="width: 400px;" name="Teams" id="Teams" 
+          class="form-control" #selectteams (change)="OnteamSelectChange(selectteams.value)">
+            <option   value="Select"  >
+                Select Teams </option>
+                <option *ngFor="let teamObj of teamsDetails"  [value]="teamObj.id"  >
+                    {{teamObj.displayName}}</option>
+            </select>
+             
+            <!-- Add More Channels Div Start Here-->
+            <div class="card" style="margin: 10px;width: 50%;border-color: #078FA1;">
+              <div class="card-header" style="background-image: url('assets/card.jpg');;color:rgb(6,97,107);font-weight:900;font-size: large;">
+                Add More Channels 
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Enter Channels Name Here</h5>
+                <p class="card-text"><input #addmoreChannelsText class="form-control item" style="width: 50%;" placeholder="Enter Channels Name Here ! "/></p>
+                <button  class="button" id="AddMoreChannelsBtn" (click)="NewChannelsAddInList(addmoreChannelsText.value)" style="float: left;">Add Channels</button>
+              </div>
+            </div>
+            
+
+
+             <!-- AddMore Chnanels Div End Here-->
+
+            <!-- CheckBoxes Div Start Here   -->
+            <div style="padding:10px;margin: 10px;">
+                <!-- Dynamnic Later should be configure into Mongo DB -->
+                 <input type="checkbox" #devCheckBox  value="Dev" (click)="GenerateChannelsName($event)" /> Development 
+                 <input type="checkbox" #baCheckBox value="BA" (click)="GenerateChannelsName($event)"/> BA
+                 <input type="checkbox" #pmoCheckBox  value="PMO" (click)="GenerateChannelsName($event)"/> PMO 
+                 <input type="checkbox" #testingCheckBox value="Testing" (click)="GenerateChannelsName($event)"/> Testing
+                 <di #dynamicChannelsDiv ></di>
+                </div>
+             <!-- CheckBoxes   Div End here-->
+  
+
+               <!-- Tool  Div Start Here   -->
+               <div style="padding:10px;margin: 10px;">
+                <!-- Dynamnic Later should be configure into Mongo DB -->
+                 <input type="checkbox" #jiraCheckBox  value="Notification-Jira" (click)="GenerateChannelsNameForToolsAndProcess($event)" /> Jira 
+                 <input type="checkbox" #confluenceCheckBox value="Notification-Confluence" (click)="GenerateChannelsNameForToolsAndProcess($event)"/> Confluence
+                 <input type="checkbox" #bitbucketCheckBox  value="Notification-BitBucket"  (click)="GenerateChannelsNameForToolsAndProcess($event)"/> Bit-Bucket 
+                 <input type="checkbox" #azuredeveopsCheckBox value="Notification-AzureDeveops" (click)="GenerateChannelsNameForToolsAndProcess($event)" /> Azure Deveops
+                </div>
+             <!-- Tool   Div End here-->
+
+
+                     <!-- Process  Div Start Here   -->
+            <div style="padding:10px;margin: 10px;">
+                <!-- Dynamnic Later should be configure into Mongo DB -->
+                 <input type="checkbox" #releaseCheckBox value="Notification-Released" (click)="GenerateChannelsNameForToolsAndProcess($event)" /> Released
+                 <input type="checkbox" #builtCheckBox  value="Notification-Built" (click)="GenerateChannelsNameForToolsAndProcess($event)" /> Built 
+                
+
+                </div>
+             <!-- Process   Div End here-->
+           <button   style="width:170px;" class="button" type="button" (click)="CreateChannels(
+            devCheckBox.checked,baCheckBox.checked, pmoCheckBox.checked, testingCheckBox.checked,
+            jiraCheckBox.checked,confluenceCheckBox.checked ,bitbucketCheckBox.checked,azuredeveopsCheckBox.checked,
+            cicdCheckBox.checked,releaseCheckBox.checked,builtCheckBox.checked)" >Create Channels</button>
+        </div>
+          
+
+          <hr style="background-color: #089FB3;"/>
+
+            </div>
+         
+
+            <!-- Dynamic Area-->
+            <div style="width: 100%;">
+            <!-- Left Side Panels--> 
+            <div   #leftSideDivElementID  style="float:left; width: 30%"> 
+                
+              
+            <!-- Channels Div -->
+
+          
+            
+
+
+            <!-- Channels Div End Here-->
+
+
+
+           
+
+        </div>
+        <!-- Left Side Div End -->
+        
+
+    
+
+           <!-- Right Side Div-->
+
+     <div #rightSideDiv  id="rightSideDiv" style="float:right;width: 60%;visibility: hidden;">
+     <strong>Employee Name & Mail ID</strong>
+      <!-- Teams Members Name And Email ID -->
+      <table class="table table-striped">
+        <thead>
+           <tr>
+             <th><input type="checkbox" #MaincheckBox  id="mainCheckBox" [checked]="localSetting.isSelected"  (change)="onMainCheckBoxChanged(MaincheckBox.checked)"   /></th>
+              <th>Name</th>
+              <th>Email ID</th>
+           </tr>
+        </thead>
+        <tbody id="tbody">
+           <tr *ngFor="let item of allemployeesdetailsPage">
+             <td><input type="checkbox" #childcheckBox  id="{{item.mail}}"  [checked]="item.isSelected"  (change)="childcheckBoxChangeEvent(childcheckBox.id,childcheckBox.checked)"   /></td>
+              <td  [(ngModel)]="item.displayName">{{ item.displayName }}</td>
+              <td [(ngModel)]="item.mail">{{ item.mail }}</td>
+           </tr>
+        </tbody>
+     </table>
+     <span style="float: left;margin: 20px;padding: 10x;">
+      <button  value="Previous"  class="back" style="float: left;margin: 20px;padding-left: 30px;"
+     [className]="localSetting.isdisabledPreviousbuttonClass" [disabled]="localSetting.ispreviousButtonDisabled" (click)="PreviousPage()" >Previous</button> 
+    <button   value="Next"  class="button" style="float: left;margin: 20px"
+    [disabled]="localSetting.isnextButtonDisabled"  [className]="localSetting.isdisabledNextbuttonClass" (click)="NextPage()" >Next</button> 
+    </span>
+   </div>
+
+
+  </div>   
+         <!-- Main Div Duynamic Div WEnd here-->
+         <div style="clear:both"></div>
+        
+
+           <!-- Right Div End  -->
+
+           <!-- Dynamic Area-->
+    </div>
+
+
+    
+     </div>
+    
+
+     
